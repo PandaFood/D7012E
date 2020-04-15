@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a02930f6acca591ae5b661dc6bfcf28a49c1039401053fee15fc4165c60bd989
+-- hash: 5050aa432b29560ef7db194f84883fec5af4d36b2fdbb151d10d0163ffa35045
 
 name:           D7012E
 version:        0.1.0.0
@@ -15,7 +15,6 @@ author:         Author name here
 maintainer:     example@example.com
 copyright:      2020 Author name here
 license:        BSD3
-license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
