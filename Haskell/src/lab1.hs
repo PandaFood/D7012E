@@ -1,3 +1,6 @@
+-- For D7012E Declarative languages at Luleå univserity of technology
+-- By Jonathan Brorsson
+
 data IndexList = IndexList [Int] Int Int deriving (Show)
 
 subList :: [Int] -> Int -> Int -> [IndexList]
@@ -54,12 +57,12 @@ k :: Int
 -- k = 15
 
 -- CASE 2
--- list = [24,-11,-34,42,-24,7,-19,21]
--- k = 6
+list = [24,-11,-34,42,-24,7,-19,21]
+k = 6
 
 -- CASE 3
-list = [3,2,-4,3,2,-5,-2,2,3,-3,2,-5,6,-2,2,3]
-k = 8
+-- list = [3,2,-4,3,2,-5,-2,2,3,-3,2,-5,6,-2,2,3]
+-- k = 8
 
 
 
