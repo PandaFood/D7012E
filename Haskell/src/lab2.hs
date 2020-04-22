@@ -107,3 +107,14 @@ simplify (App oper x) = App oper (simplify x)
 mkfun :: (EXPR, EXPR) -> (Float -> Float)
 mkfun (body, var) f = eval body [(unparse var, f)]
 
+findzero :: String -> String -> Float -> Float
+findzero s1 s2 = newrap
+  where
+    f = mkfun (parse s2, Var s1)
+    f' = mkfun ((diff (Var s1) (parse s2)), Var s1) 
+    newrap :: Float -> Float
+    newrap x0
+      | abs (xn - x0) >= 0.0001 = newrap xn
+      | otherwise = x0
+      where
+        xn = x0 - f x0 / f' x0 
