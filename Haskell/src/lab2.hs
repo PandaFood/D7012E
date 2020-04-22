@@ -1,4 +1,5 @@
--- Code to Haskell lab assignment 2 in the course D7012E by HÃ¥kan Jonsson
+-- Code to Haskell lab assignment 2 in the course D7012E
+-- by Jonathan Brorsson
 
 import Data.Char
 
@@ -56,6 +57,7 @@ unparse :: EXPR -> String
 unparse (Const n) = show n
 unparse (Var s) = s
 unparse (Op oper e1 e2) = "(" ++ unparse e1 ++ oper ++ unparse e2 ++ ")"
+unparse (App oper x) = oper ++ "(" ++ unparse x ++ ")"
 
 eval :: EXPR -> [(String,Float)] -> Float
 eval (Const n) _ = fromIntegral n
@@ -64,7 +66,10 @@ eval (Op "+" left right) env = eval left env + eval right env
 eval (Op "-" left right) env = eval left env - eval right env
 eval (Op "*" left right) env = eval left env * eval right env
 eval (Op "/" left right) env = eval left env / eval right env
--- eval (Op "sin" _ right) env = eval env sin eval right env
+eval (App "sin" x) env = sin (eval x env)
+eval (App "cos" x) env = cos (eval x env)
+eval (App "log" x) env = log (eval x env)
+eval (App "exp" x) env = exp (eval x env)
 
 diff :: EXPR -> EXPR -> EXPR
 diff _ (Const _) = Const 0
@@ -75,7 +80,10 @@ diff v (Op "+" e1 e2) = Op "+" (diff v e1) (diff v e2)
 diff v (Op "-" e1 e2) = Op "-" (diff v e1) (diff v e2)
 diff v (Op "*" e1 e2) = Op "+" (Op "*" (diff v e1) e2) (Op "*" e1 (diff v e2))
 diff v (Op "/" e1 e2) = Op "/" (Op "-" (Op "*" (diff v e1) e1) (Op "*" e1 (diff v e2))) (Op "*" e2 e2)
-diff v (Op "sin" _ e2) = Op "sin" (diff v e2) 
+diff v (App "sin" x) = Op "*" (diff v x) (App "cos" x)
+diff v (App "cos" x) = Op "*" (diff v (Op "*" (Const (-1)) x)) (App "sin" x)
+diff v (App "log" x) = Op "/" (diff v x) x
+diff v (App "exp" x) = Op "*" (diff v x) (App "exp" x)
 diff _ _ = error "can not compute the derivative"
 
 simplify :: EXPR -> EXPR
@@ -94,4 +102,8 @@ simplify (Op oper left right) =
       ("/",e,Const 1) -> e
       ("-",le,re)     -> if left==right then Const 0 else Op "-" le re
       (op,le,re)      -> Op op le re
+simplify (App oper x) = App oper (simplify x)
+
+mkfun :: (EXPR, EXPR) -> (Float -> Float)
+mkfun (body, var) f = eval body [(unparse var, f)]
 
