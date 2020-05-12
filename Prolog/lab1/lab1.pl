@@ -66,4 +66,4 @@ solveR(State, N, [Trace| Trace2]) :-
     solveR(NewState, N-1, Trace2).
 
 startState(state(r1, r2, r1, r3)).
-start :- startState(S), solveR(state(r1, r2, r1, r3), 8, Trace).
+start(Trace) :- startState(S), solveR(S, 15, Trace).
